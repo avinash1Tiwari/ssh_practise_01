@@ -11,3 +11,7 @@ class UserView(APIView):
             "message" : "Everything is running",
             "status" : True
         },status=200)
+
+class HelloAPIView(APIView):
+    def get(self, request):
+        return Response({"message": "hello from feature branch"},status=200)
