@@ -21,12 +21,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-f9k!s*l-b&@v8(*mw@*oh!r4l0+^tbq_*3h@amkgg*-l_rk48s'
+from decouple import Config, RepositoryEnv
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+env_file = BASE_DIR / ".env"
+base_config = Config(RepositoryEnv(env_file))
+DJANGO_ENV = base_config("DJANGO_ENV", default="dev")
 
+selected_env_file = BASE_DIR / f".env.{DJANGO_ENV}"
+
+config = Config(RepositoryEnv(env_file))
 
 # Application definition
 
@@ -76,8 +83,19 @@ WSGI_APPLICATION = 'project_01.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'django_ecommerce',
+        # 'USER': 'postgres',
+        # 'PASSWORD': 'Avi2003nash@',
+        # 'HOST': 'localhost',
+        # 'PORT': '5432',
+
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config("DB_NAME"),
+        "USER": config("DB_USER"),
+        "PASSWORD": config("DB_PASSWORD"),
+        "HOST": config("DB_HOST"),
+        "PORT": config("DB_PORT"),
     }
 }
 
